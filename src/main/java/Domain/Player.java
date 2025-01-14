@@ -3,6 +3,10 @@ package src.main.java.Domain;
 public class Player {
     String name;
     PlayingPiece playingPiece;
+    public int[] rowScore;
+    public int[] colScore;
+    public int diagScore;
+    public int antiDiagScore;
 
     public Player(String name, PlayingPiece playingPiece) {
         this.name = name;

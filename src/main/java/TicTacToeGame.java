@@ -25,6 +25,11 @@ public class TicTacToeGame {
         players.add(player2);
 
         gameBoard = new Board(3);
+        player1.rowScore = new int[gameBoard.getSize()];
+        player1.colScore = new int[gameBoard.getSize()];
+        player2.rowScore = new int[gameBoard.getSize()];
+        player2.colScore = new int[gameBoard.getSize()];
+        
     }
 
     public String startGame() {
@@ -58,10 +63,18 @@ public class TicTacToeGame {
                 players.addFirst(playerTurn);
                 continue;
             }
+            playerTurn.rowScore[inputRow]++;
+            playerTurn.colScore[inputColumn]++;
+            if (inputColumn == inputRow) {
+                playerTurn.diagScore++;
+            }
+            if (inputRow == gameBoard.getSize()-inputColumn-1) {
+                playerTurn.antiDiagScore++;
+            }
 
             players.addLast(playerTurn);
 
-            boolean winner = isThereWinner(inputRow, inputColumn, playerTurn.getPlayingPiece().getPieceType());
+            boolean winner = isThereWinner(inputRow, inputColumn, playerTurn);
             if (winner) {
                 return playerTurn.getName();
             }
@@ -69,42 +82,51 @@ public class TicTacToeGame {
         return "tie";
     }
 
-    public boolean isThereWinner(int row, int column, PieceType pieceType) {
+    public boolean isThereWinner(int row, int column, Player player) {
 
-        boolean rowMatch = true;
-        boolean columnMatch = true;
-        boolean diagonalMatch = true;
-        boolean antiDiagonalMatch = true;
+        // boolean rowMatch = true;
+        // boolean columnMatch = true;
+        // boolean diagonalMatch = true;
+        // boolean antiDiagonalMatch = true;
+
+        boolean rowMatch = (player.rowScore[row] == gameBoard.getSize());
+        boolean columnMatch = (player.colScore[column] == gameBoard.getSize());
+        boolean diagonalMatch = (player.diagScore == gameBoard.getSize());
+        boolean antiDiagonalMatch = (player.antiDiagScore == gameBoard.getSize());
+
+        // PieceType pieceType = player.getPlayingPiece().getPieceType();
+
+
 
         //need to check in row
-        for(int i=0;i<gameBoard.getSize();i++) {
+        // for(int i=0;i<gameBoard.getSize();i++) {
 
-            if(gameBoard.board[row][i] == null || gameBoard.board[row][i].getPieceType() != pieceType) {
-                rowMatch = false;
-            }
-        }
+        //     if(gameBoard.board[row][i] == null || gameBoard.board[row][i].getPieceType() != pieceType) {
+        //         rowMatch = false;
+        //     }
+        // }
 
         //need to check in column
-        for(int i=0;i<gameBoard.getSize();i++) {
+        // for(int i=0;i<gameBoard.getSize();i++) {
 
-            if(gameBoard.board[i][column] == null || gameBoard.board[i][column].getPieceType() != pieceType) {
-                columnMatch = false;
-            }
-        }
+        //     if(gameBoard.board[i][column] == null || gameBoard.board[i][column].getPieceType() != pieceType) {
+        //         columnMatch = false;
+        //     }
+        // }
 
         //need to check diagonals
-        for(int i=0, j=0; i<gameBoard.getSize();i++,j++) {
-            if (gameBoard.board[i][j] == null || gameBoard.board[i][j].getPieceType() != pieceType) {
-                diagonalMatch = false;
-            }
-        }
+        // for(int i=0, j=0; i<gameBoard.getSize();i++,j++) {
+        //     if (gameBoard.board[i][j] == null || gameBoard.board[i][j].getPieceType() != pieceType) {
+        //         diagonalMatch = false;
+        //     }
+        // }
 
         //need to check anti-diagonals
-        for(int i=0, j=gameBoard.getSize()-1; i<gameBoard.getSize();i++,j--) {
-            if (gameBoard.board[i][j] == null || gameBoard.board[i][j].getPieceType() != pieceType) {
-                antiDiagonalMatch = false;
-            }
-        }
+        // for(int i=0, j=gameBoard.getSize()-1; i<gameBoard.getSize();i++,j--) {
+        //     if (gameBoard.board[i][j] == null || gameBoard.board[i][j].getPieceType() != pieceType) {
+        //         antiDiagonalMatch = false;
+        //     }
+        // }
 
         return rowMatch || columnMatch || diagonalMatch || antiDiagonalMatch;
     }
